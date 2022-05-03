@@ -1,6 +1,6 @@
 import { Calculator } from './calculator';
 
-describe('calculator', () => {
+fdescribe('calculator', () => {
   const calculator = new Calculator();
 
   it('should multiply', () => {
