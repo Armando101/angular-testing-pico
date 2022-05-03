@@ -13,6 +13,5 @@ export class AppComponent implements OnInit {
     const calculator = new Calculator();
     const rta = calculator.multiply(2, 5);
     const rta2 = calculator.divide(2, 0);
-    debugger;
   }
 }
