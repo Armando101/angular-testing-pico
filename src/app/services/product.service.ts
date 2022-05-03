@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { retry, catchError, map } from 'rxjs/operators';
-import { throwError, zip } from 'rxjs';
+import { Observable, throwError, zip } from 'rxjs';
 
 import {
   Product,
@@ -23,19 +23,19 @@ export class ProductsService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(limit?: string, offset?: number) {
+  getAll(limit?: string, offset?: string): Observable<Product[]> {
     let params = new HttpParams();
     if (limit && offset) {
       params = params.set('limit', limit);
-      params = params.set('offset', limit);
+      params = params.set('offset', offset);
     }
-    return this.http.get<Product[]>(this.apiUrl, { params }).pipe(
+    return this.http.get<Product[]>(`${this.apiUrl}/products`, { params }).pipe(
       retry(3),
       map((products) =>
         products.map((item) => {
           return {
             ...item,
-            taxes: 0.19 * item.price,
+            taxes: item.price > 0 ? 0.19 * item.price : 0,
           };
         })
       )
