@@ -24,7 +24,7 @@ import {
 import { ProductsService } from './product.service';
 import { TokenService } from './token.service';
 
-fdescribe('ProductService', () => {
+describe('ProductService', () => {
   let productService: ProductsService;
   let httpController: HttpTestingController;
   let tokenService: TokenService;
