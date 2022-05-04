@@ -8,7 +8,11 @@ import {
   generateManyProducts,
   generateOneProduct,
 } from '../mocks/product.mock';
-import { Product } from '../models/product.model';
+import {
+  CreateProductDTO,
+  Product,
+  UpdateProductDTO,
+} from '../models/product.model';
 import { ProductsService } from './product.service';
 
 fdescribe('ProductService', () => {
@@ -23,6 +27,8 @@ fdescribe('ProductService', () => {
     productService = TestBed.inject(ProductsService);
     httpController = TestBed.inject(HttpTestingController);
   });
+
+  afterEach(() => httpController.verify());
 
   it('should be created', () => {
     expect(productService).toBeTruthy();
@@ -43,7 +49,6 @@ fdescribe('ProductService', () => {
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
     });
   });
 
@@ -62,7 +67,6 @@ fdescribe('ProductService', () => {
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
     });
 
     it('should return product list with taxes', (doneFn) => {
@@ -83,7 +87,6 @@ fdescribe('ProductService', () => {
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
     });
 
     it('should return product list with taxes testing not happy path', (doneFn) => {
@@ -102,7 +105,6 @@ fdescribe('ProductService', () => {
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
       req.flush(mockData);
-      httpController.verify();
     });
 
     it('should send query params with limit 10 and offset 3', (doneFn) => {
@@ -122,7 +124,79 @@ fdescribe('ProductService', () => {
       const params = req.request.params;
       expect(params.get('limit')).toEqual(`${limit}`);
       expect(params.get('offset')).toEqual(`${offset}`);
-      httpController.verify();
+    });
+  });
+
+  describe('test for create', () => {
+    it('should return a new product', (doneFn) => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const dto: CreateProductDTO = {
+        title: 'new Product',
+        price: 100,
+        images: ['img'],
+        description: 'my description',
+        categoryId: 12,
+      };
+
+      // Act
+      productService.create({ ...dto }).subscribe((data) => {
+        // Assert
+        expect(data).toEqual(mockData);
+        doneFn();
+      });
+
+      // http config
+      const url = `${environment.API_URL}/api/v1/products`;
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
+      expect(req.request.body).toEqual(dto);
+      expect(req.request.method).toEqual('POST');
+    });
+  });
+
+  describe('test for update', () => {
+    it('should return an update product', (doneFn) => {
+      // Arrange
+      const mockData = generateOneProduct();
+      const dto: UpdateProductDTO = {
+        title: 'update Product',
+        description: 'my description',
+        categoryId: 12,
+      };
+      const id = '5';
+      // Act
+      productService.update(id, { ...dto }).subscribe((data) => {
+        // Assert
+        expect(data).toEqual(mockData);
+        doneFn();
+      });
+
+      // http config
+      const url = `${environment.API_URL}/api/v1/products/${id}`;
+      const req = httpController.expectOne(url);
+      req.flush(mockData);
+      expect(req.request.body).toEqual(dto);
+      expect(req.request.method).toEqual('PUT');
+    });
+  });
+
+  describe('test for delete', () => {
+    it('should delete product', (doneFn) => {
+      // Arrange
+      const id = '5';
+      // Act
+      productService.delete(id).subscribe((response) => {
+        // Assert
+        expect(response.rta).toBeTrue();
+        doneFn();
+      });
+
+      // http config
+      const url = `${environment.API_URL}/api/v1/products/${id}`;
+      const req = httpController.expectOne(url);
+      req.flush({ rta: true });
+      expect(req.request.method).toEqual('DELETE');
     });
   });
 });
