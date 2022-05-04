@@ -1,3 +1,4 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -10,6 +11,7 @@ import {
   DEFAULT_ERROR_MSG,
   NOT_FOUND_PRODUCT_MSG,
 } from '../constants/errors.constants';
+import { TokenInterceptor } from '../interceptors/token.interceptor';
 import {
   generateManyProducts,
   generateOneProduct,
@@ -20,18 +22,29 @@ import {
   UpdateProductDTO,
 } from '../models/product.model';
 import { ProductsService } from './product.service';
+import { TokenService } from './token.service';
 
 fdescribe('ProductService', () => {
   let productService: ProductsService;
   let httpController: HttpTestingController;
+  let tokenService: TokenService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ProductsService],
+      providers: [
+        ProductsService,
+        TokenService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: TokenInterceptor,
+          multi: true,
+        },
+      ],
     });
     productService = TestBed.inject(ProductsService);
     httpController = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
 
   afterEach(() => httpController.verify());
@@ -43,7 +56,9 @@ fdescribe('ProductService', () => {
   describe('test for getAllSimple', () => {
     it('should return a product list', (doneFn) => {
       // Arrange
+      const token = '123';
       const mockData: Product[] = generateManyProducts();
+      spyOn(tokenService, 'getToken').and.returnValue(token);
 
       // Act
       productService.getAllSimple().subscribe((data) => {
@@ -54,6 +69,9 @@ fdescribe('ProductService', () => {
       // http config
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
+      const headers = req.request.headers;
+
+      expect(headers.get('Authorization')).toEqual(`Bearer ${token}`);
       req.flush(mockData);
     });
   });
