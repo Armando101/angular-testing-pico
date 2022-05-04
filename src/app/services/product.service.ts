@@ -14,6 +14,12 @@ import {
 } from './../models/product.model';
 import { environment } from './../../environments/environment';
 import { HttpStatusCode } from 'src/helpers/HttpStatusCode';
+import {
+  CONFLICT_MSG,
+  DEFAULT_ERROR_MSG,
+  NOT_FOUND_PRODUCT_MSG,
+  UNAUTHORIZED_MSG,
+} from '../constants/errors.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -51,31 +57,31 @@ export class ProductsService {
   }
 
   getOne(id: string) {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<Product>(`${this.apiUrl}/products/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.Conflict) {
-          return throwError('Algo esta fallando en el server');
+          return throwError(CONFLICT_MSG);
         }
         if (error.status === HttpStatusCode.NotFound) {
-          return throwError('El producto no existe');
+          return throwError(NOT_FOUND_PRODUCT_MSG);
         }
         if (error.status === HttpStatusCode.Unauthorized) {
-          return throwError('No estas permitido');
+          return throwError(UNAUTHORIZED_MSG);
         }
-        return throwError('Ups algo salio mal');
+        return throwError(DEFAULT_ERROR_MSG);
       })
     );
   }
 
   create(dto: CreateProductDTO) {
-    return this.http.post<Product>(this.apiUrl, dto);
+    return this.http.post<Product>(`${this.apiUrl}/products`, dto);
   }
 
   update(id: string, dto: UpdateProductDTO) {
-    return this.http.put<Product>(`${this.apiUrl}/${id}`, dto);
+    return this.http.put<Product>(`${this.apiUrl}/products/${id}`, dto);
   }
 
   delete(id: string) {
-    return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
+    return this.http.delete<{ rta: boolean }>(`${this.apiUrl}/products/${id}`);
   }
 }
