@@ -1,3 +1,13 @@
+export enum IMC_TYPES {
+  'Not found',
+  'down',
+  'normal',
+  'overweigth',
+  'overweigth level 1',
+  'overweigth level 2',
+  'overweigth level 3',
+}
+
 export class Person {
   constructor(
     public name: string,
