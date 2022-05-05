@@ -11,7 +11,12 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { PersonComponent } from './components/person/person.component';
 
 @NgModule({
-  declarations: [AppComponent, ProductsComponent, PicoPreviewComponent, PersonComponent],
+  declarations: [
+    AppComponent,
+    ProductsComponent,
+    PicoPreviewComponent,
+    PersonComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
