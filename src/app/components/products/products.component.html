@@ -4,4 +4,9 @@
     <app-product [product]="product" *ngFor="let product of products">
     </app-product>
   </div>
+  <button (click)="getAllProducts()">
+    <span *ngIf="status === 'init' || status === 'succes'">Load more</span>
+    <span *ngIf="status === 'loading'">Loading</span>
+    <span *ngIf="status === 'error'">Error</span>
+  </button>
 </section>

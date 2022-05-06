@@ -44,4 +44,22 @@ fdescribe('ProductsComponent', () => {
   it('should call getAll method', () => {
     expect(productService.getAll).toHaveBeenCalled();
   });
+
+  describe('tests for getAllProducts', () => {
+    it('should return a product list from service', () => {
+      // Arrange
+      const productsMock = generateManyProducts();
+      const countPrev = component.products.length;
+      productService.getAll.and.callFake(() => of(productsMock));
+      fixture.detectChanges();
+
+      // Act
+      component.getAllProducts();
+
+      // Assert
+      expect(component.products.length).toEqual(
+        productsMock.length + countPrev
+      );
+    });
+  });
 });
