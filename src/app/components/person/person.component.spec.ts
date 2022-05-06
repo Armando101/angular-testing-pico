@@ -83,10 +83,31 @@ fdescribe('PersonComponent', () => {
     const buttonDebug = fixture.debugElement.query(By.css('.btn-imc'));
     const buttonElement = buttonDebug.nativeElement;
     // Act
+    // Tipo de evento a ejecutar (click)
+    // Parámetros o tipo de evento que se ejecute en el click
     buttonDebug.triggerEventHandler('click', null);
     fixture.detectChanges();
 
     // Assert
     expect(buttonElement.textContent).toContain(expectMsg);
+  });
+
+  it('should raise selected event when do click', () => {
+    // Arrange
+    const expectedPerson = new Person('Juan', 'Hernandez', 30, 80, 1.65);
+    component.person = expectedPerson;
+    const buttonDebug = fixture.debugElement.query(By.css('button.btn-choose'));
+
+    let selectedPerson: Person | undefined;
+    component.onSelected.subscribe((person) => {
+      selectedPerson = person;
+      expect(person).toEqual(expectedPerson);
+    });
+    // Act
+    buttonDebug.triggerEventHandler('click', null);
+    fixture.detectChanges();
+
+    // Assert
+    expect(selectedPerson).toEqual(expectedPerson);
   });
 });
