@@ -1,4 +1,4 @@
-<div class="product">
+<div *ngIf="product" class="product">
   <figure>
     <img loading="lazy" [src]="product.images[0]" alt="" />
     <figcaption>{{ product.title }} - {{ product.price }}</figcaption>
