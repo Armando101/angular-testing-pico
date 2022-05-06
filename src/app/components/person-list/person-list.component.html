@@ -1,1 +1,16 @@
-<app-person [person]="person"></app-person>
+<div class="container">
+  <h3>Count ({{ personList.length }})</h3>
+
+  <div class="selectedPerson" *ngIf="selectedPerson">
+    <ul>
+      <li>Name: {{ selectedPerson.name }}</li>
+      <li>Age: {{ selectedPerson.age }}</li>
+    </ul>
+  </div>
+
+  <app-person
+    *ngFor="let person of personList"
+    [person]="person"
+    (onSelected)="choose($event)"
+  ></app-person>
+</div>
