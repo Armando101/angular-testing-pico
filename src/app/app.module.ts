@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { PersonComponent } from './components/person/person.component';
 import { PersonListComponent } from './components/person-list/person-list.component';
+import { ProductComponent } from './components/product/product.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,6 +18,7 @@ import { PersonListComponent } from './components/person-list/person-list.compon
     PicoPreviewComponent,
     PersonComponent,
     PersonListComponent,
+    ProductComponent,
   ],
   imports: [
     BrowserModule,

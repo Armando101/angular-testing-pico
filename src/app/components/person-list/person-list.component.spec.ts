@@ -53,11 +53,11 @@ fdescribe('PersonListComponent', () => {
 
     // Act
     fixture.detectChanges();
-    const debugButtonList = fixture.debugElement.queryAll(
+    const debugButtonList = fixture.debugElement.query(
       By.css('app-person .btn-choose')
     );
 
-    debugButtonList[0].triggerEventHandler('click', null);
+    debugButtonList.triggerEventHandler('click', null);
     fixture.detectChanges();
     const debugPersonSelectedInfo = fixture.debugElement.queryAll(
       By.css('.selectedPerson ul li')
@@ -71,5 +71,7 @@ fdescribe('PersonListComponent', () => {
     expect(debugPersonSelectedInfo[1].nativeElement.textContent).toContain(
       personList[0].age
     );
+
+    expect(component.selectedPerson).toEqual(component.personList[0]);
   });
 });
