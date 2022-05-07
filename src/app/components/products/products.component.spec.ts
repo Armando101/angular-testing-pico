@@ -1,5 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
+import { defer, of } from 'rxjs';
 import { generateManyProducts } from 'src/app/mocks/product.mock';
 import { ProductsService } from 'src/app/services/product.service';
 import { ProductComponent } from '../product/product.component';
@@ -61,5 +66,44 @@ fdescribe('ProductsComponent', () => {
         productsMock.length + countPrev
       );
     });
+
+    it('should change the status "loading" => "success"', fakeAsync(() => {
+      // Arrange
+      const productsMock = generateManyProducts();
+      productService.getAll.and.returnValue(
+        defer(() => Promise.resolve(productsMock))
+      );
+
+      // Act
+      component.getAllProducts();
+      fixture.detectChanges();
+
+      expect(component.status).toEqual('loading');
+
+      tick(); // Exec all pending observers, promises, setTimeout, etc;
+      fixture.detectChanges();
+
+      // Assert
+      expect(component.status).toEqual('success');
+    }));
+
+    it('should change the status "loading" => "error"', fakeAsync(() => {
+      // Arrange
+      productService.getAll.and.returnValue(
+        defer(() => Promise.reject('Error'))
+      );
+
+      // Act
+      component.getAllProducts();
+      fixture.detectChanges();
+
+      expect(component.status).toEqual('loading');
+
+      tick(400); // Exec all pending observers, promises, setTimeout, etc;
+      fixture.detectChanges();
+
+      // Assert
+      expect(component.status).toEqual('error');
+    }));
   });
 });
