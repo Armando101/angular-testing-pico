@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/models/product.model';
 import { ProductsService } from 'src/app/services/product.service';
+import { ValueService } from 'src/app/services/value.service';
 
 @Component({
   selector: 'app-products',
@@ -9,16 +10,41 @@ import { ProductsService } from 'src/app/services/product.service';
 })
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
+  limit = 10;
+  offset = 0;
+  status: 'loading' | 'success' | 'error' | 'init' = 'init';
+  rta: string;
 
-  constructor(private readonly productService: ProductsService) {}
+  constructor(
+    private readonly productService: ProductsService,
+    private readonly valueService: ValueService
+  ) {}
 
   ngOnInit(): void {
     this.getAllProducts();
   }
 
   getAllProducts() {
-    this.productService.getAllSimple().subscribe((products) => {
-      this.products = products;
-    });
+    this.status = 'loading';
+    this.productService
+      .getAll(String(this.limit), String(this.offset))
+      .subscribe(
+        (products) => {
+          this.products = [...this.products, ...products];
+          this.offset += this.limit;
+          this.status = 'success';
+        },
+        (error) => {
+          setTimeout(() => {
+            this.products = [];
+            this.status = 'error';
+          }, 300);
+        }
+      );
+  }
+
+  async callPromise() {
+    const rta = await this.valueService.getPromise();
+    this.rta = rta;
   }
 }
