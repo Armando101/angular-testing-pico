@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { HighligthDirective } from './highligth.directive';
 
@@ -9,9 +10,12 @@ import { HighligthDirective } from './highligth.directive';
     <h5 highligth="yellow">There is some value</h5>
     <p highligth="blue">Parrafo</p>
     <p>otro parrafo</p>
+    <input [(ngModel)]="color" [highligth]="color" />
   `,
 })
-class Hostcomponent {}
+class Hostcomponent {
+  color = 'pink';
+}
 
 fdescribe('HighligthDirective', () => {
   let component: Hostcomponent;
@@ -20,6 +24,7 @@ fdescribe('HighligthDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [Hostcomponent, HighligthDirective],
+      imports: [FormsModule],
     }).compileComponents();
   });
 
@@ -33,7 +38,7 @@ fdescribe('HighligthDirective', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should applied directive to three elements', () => {
+  it('should applied directive to four elements', () => {
     // const elements = fixture.debugElement.queryAll(By.css('*[highligth]'));
     const elements = fixture.debugElement.queryAll(
       By.directive(HighligthDirective)
@@ -42,8 +47,8 @@ fdescribe('HighligthDirective', () => {
       By.css('*:not([highligth])')
     );
 
-    expect(elements.length).toEqual(3);
-    expect(elementsWithoutDirective.length).toEqual(1);
+    expect(elements.length).toEqual(4);
+    expect(elementsWithoutDirective.length).toEqual(2);
   });
 
   it('should the elements be match with bgColor', () => {
@@ -63,5 +68,20 @@ fdescribe('HighligthDirective', () => {
     expect(element.nativeElement.style.backgroundColor).toEqual(
       dir.defaultColor
     );
+  });
+
+  it('should bind <input/> and change backgroundColor', () => {
+    const input = fixture.debugElement.query(By.css('input'));
+    const inputElement: HTMLInputElement = input.nativeElement;
+
+    expect(inputElement.style.backgroundColor).toEqual('pink');
+
+    const newColor = 'cyan';
+    inputElement.value = newColor;
+    inputElement.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(inputElement.style.backgroundColor).toEqual(newColor);
+    expect(component.color).toEqual(newColor);
   });
 });
