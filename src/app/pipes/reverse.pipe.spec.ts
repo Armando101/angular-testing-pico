@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ReversePipe } from './reverse.pipe';
 
-fdescribe('ReversePipe', () => {
+describe('ReversePipe', () => {
   it('create an instance', () => {
     const pipe = new ReversePipe();
     expect(pipe).toBeTruthy();
@@ -28,7 +28,7 @@ class Hostcomponent {
   text = '';
 }
 
-fdescribe('ReservePipe from Hostcomponent', () => {
+describe('ReservePipe from Hostcomponent', () => {
   let component: Hostcomponent;
   let fixture: ComponentFixture<Hostcomponent>;
 

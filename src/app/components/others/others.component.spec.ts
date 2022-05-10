@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReversePipe } from 'src/app/pipes/reverse.pipe';
 
 import { OthersComponent } from './others.component';
 
@@ -8,9 +9,8 @@ describe('OthersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OthersComponent ]
-    })
-    .compileComponents();
+      declarations: [OthersComponent, ReversePipe],
+    }).compileComponents();
   });
 
   beforeEach(() => {
