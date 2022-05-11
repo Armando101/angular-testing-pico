@@ -14,7 +14,7 @@ import {
   mockObservable,
   mockPromise,
 } from 'src/testing';
-import { query, queryById } from 'src/testing/finders';
+import { getText, query, queryById } from 'src/testing/finders';
 import { ProductComponent } from '../product/product.component';
 
 import { ProductsComponent } from './products.component';
@@ -114,20 +114,16 @@ describe('ProductsComponent', () => {
       debugButton.triggerEventHandler('click', null);
       fixture.detectChanges();
 
-      const debugSpanButtonBefore = fixture.debugElement.query(
-        By.css('.getAllProductsButton span')
-      ).nativeElement;
-      expect(debugSpanButtonBefore.textContent).toContain('Loading');
+      const debugSpanButtonText = getText(fixture, 'spanText');
+      expect(debugSpanButtonText).toContain('Loading');
 
       tick(); // Exec all pending observers, promises, setTimeout, etc;
       fixture.detectChanges();
-      const debugSpanButtonAfter = fixture.debugElement.query(
-        By.css('.getAllProductsButton span')
-      ).nativeElement;
+      const debugSpanButtonAfter = getText(fixture, 'spanText');
 
       // Assert
       expect(component.status).toEqual('success');
-      expect(debugSpanButtonAfter.textContent).toContain('Load more');
+      expect(debugSpanButtonAfter).toContain('Load more');
     }));
 
     it('should change the status "loading" => "error"', fakeAsync(() => {
@@ -175,12 +171,12 @@ describe('ProductsComponent', () => {
       debugButton.triggerEventHandler('click', null);
       tick();
       fixture.detectChanges();
-      const debugRta = queryById(fixture, 'rta').nativeElement;
+      const debugRta = getText(fixture, 'rta');
 
       // Assert
       expect(component.rta).toEqual(mockMsg);
       expect(valueService.getPromise).toHaveBeenCalled();
-      expect(debugRta.textContent).toEqual(mockMsg);
+      expect(debugRta).toEqual(mockMsg);
     }));
   });
 });

@@ -10,8 +10,12 @@
     </app-product>
   </div>
   <button class="getAllProductsButton" (click)="getAllProducts()">
-    <span *ngIf="status === 'init' || status === 'success'">Load more</span>
-    <span *ngIf="status === 'loading'">Loading</span>
-    <span *ngIf="status === 'error'">Error</span>
+    <span
+      data-testid="spanText"
+      *ngIf="status === 'init' || status === 'success'"
+      >Load more</span
+    >
+    <span data-testid="spanText" *ngIf="status === 'loading'">Loading</span>
+    <span data-testid="spanText" *ngIf="status === 'error'">Error</span>
   </button>
 </section>
