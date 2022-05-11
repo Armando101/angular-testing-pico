@@ -1,7 +1,8 @@
-import { Component, DebugElement, Host } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Person } from 'src/app/models/person.model';
+import { clickEvent, getText } from 'src/testing';
 
 import { PersonComponent } from './person.component';
 
@@ -64,32 +65,29 @@ describe('PersonComponent', () => {
     // Arrange
     const expectMsg = 'overweigth level 1';
     component.person = new Person('Juan', 'Hernandez', 30, 80, 1.65);
-    const buttonElement = fixture.debugElement.query(
-      By.css('.btn-imc')
-    ).nativeElement;
 
     // Act
     component.calcIMC();
     fixture.detectChanges();
+    const buttonElement = getText(fixture, 'btn-imc');
 
     // Assert
-    expect(buttonElement.textContent).toContain(expectMsg);
+    expect(buttonElement).toContain(expectMsg);
   });
 
   it('should display a text with IMC when do click', () => {
     // Arrange
     const expectMsg = 'overweigth level 1';
     component.person = new Person('Juan', 'Hernandez', 30, 80, 1.65);
-    const buttonDebug = fixture.debugElement.query(By.css('.btn-imc'));
-    const buttonElement = buttonDebug.nativeElement;
     // Act
     // Tipo de evento a ejecutar (click)
     // Parámetros o tipo de evento que se ejecute en el click
-    buttonDebug.triggerEventHandler('click', null);
+    clickEvent(fixture, 'btn-imc', true);
     fixture.detectChanges();
+    const buttonElement = getText(fixture, 'btn-imc');
 
     // Assert
-    expect(buttonElement.textContent).toContain(expectMsg);
+    expect(buttonElement).toContain(expectMsg);
   });
 
   it('should raise selected event when do click', () => {

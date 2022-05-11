@@ -14,7 +14,7 @@ import {
   mockObservable,
   mockPromise,
 } from 'src/testing';
-import { getText, query, queryById } from 'src/testing/finders';
+import { getText, query } from 'src/testing';
 import { ProductComponent } from '../product/product.component';
 
 import { ProductsComponent } from './products.component';
