@@ -1,6 +1,6 @@
 <section class="container">
   <h3>Hello, Im {{ person.name }}</h3>
   <p>My weigth is {{ person.heigth }}</p>
-  <button class="btn-imc" (click)="calcIMC()">IMC: {{ imc }}</button>
+  <button data-testid="btn-imc" (click)="calcIMC()">IMC: {{ imc }}</button>
   <button class="btn-choose" (click)="onClick()">Choose</button>
 </section>
