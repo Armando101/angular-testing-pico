@@ -1,4 +1,6 @@
 import { FormControl, FormGroup } from '@angular/forms';
+import { mockObservable } from 'src/testing';
+import { UsersService } from '../services/user.service';
 import { MyValidators } from './validators';
 
 fdescribe('Tests for validators', () => {
@@ -62,6 +64,27 @@ fdescribe('Tests for validators', () => {
       };
 
       expect(fn).toThrow(new Error('marchPasswords: fields not found'));
+    });
+  });
+
+  describe('Test for availabeEmailAsync', () => {
+    it('should return null with valid email', (doneFn) => {
+      // Arrange
+      const userService: jasmine.SpyObj<UsersService> = jasmine.createSpyObj(
+        'ValueService',
+        ['isAvailableByEmail']
+      );
+
+      userService.isAvailableByEmail.and.returnValue(
+        mockObservable({ isAvailable: true })
+      );
+
+      const control = new FormControl('armando@gmail.com');
+      const validator = MyValidators.validateEmailAsync(userService);
+      validator(control).subscribe((rta) => {
+        expect(rta).toBeNull();
+        doneFn();
+      });
     });
   });
 });

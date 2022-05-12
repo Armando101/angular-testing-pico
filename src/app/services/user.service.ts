@@ -19,4 +19,11 @@ export class UsersService {
   getAll() {
     return this.http.get<User[]>(this.apiUrl);
   }
+
+  isAvailableByEmail(email: string) {
+    return this.http.post<{ isAvailable: boolean }>(
+      `${this.apiUrl}/is-available`,
+      { email }
+    );
+  }
 }
