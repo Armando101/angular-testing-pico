@@ -33,5 +33,5 @@ export function clickElement<T>(
     element = query(fixture, selector);
   }
 
-  element.triggerEventHandler('click', event);
+  element.triggerEventHandler('click', null);
 }
