@@ -3,7 +3,7 @@ import { mockObservable } from 'src/testing';
 import { UsersService } from '../services/user.service';
 import { MyValidators } from './validators';
 
-fdescribe('Tests for validators', () => {
+describe('Tests for validators', () => {
   describe('Test for validatePassword', () => {
     it('should return null when password is right', () => {
       // Arrange
