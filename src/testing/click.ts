@@ -25,13 +25,14 @@ export function clickElement<T>(
   selector: string,
   withTestId: boolean = false
 ) {
-  let element: DebugElement;
+  let elementDebug: DebugElement;
 
   if (withTestId) {
-    element = queryById(fixture, selector);
+    elementDebug = queryById(fixture, selector);
   } else {
-    element = query(fixture, selector);
+    elementDebug = query(fixture, selector);
   }
 
-  element.triggerEventHandler('click', null);
+  const element: HTMLElement = elementDebug.nativeElement;
+  element.click();
 }
