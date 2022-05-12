@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/user.service';
 import { MyValidators } from 'src/app/utils/validators';
 
@@ -35,7 +36,11 @@ export class RegisterFormComponent implements OnInit {
 
   status: 'loading' | 'success' | 'error' | 'init' = 'init';
 
-  constructor(private fb: FormBuilder, private usersService: UsersService) {}
+  constructor(
+    private fb: FormBuilder,
+    private usersService: UsersService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
@@ -48,7 +53,7 @@ export class RegisterFormComponent implements OnInit {
         (rta) => {
           console.log(rta);
           this.status = 'success';
-          // redirect
+          this.router.navigateByUrl('/login');
         },
         (error) => {
           // redirect

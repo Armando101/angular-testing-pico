@@ -5,6 +5,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { generateOneUser } from 'src/app/mocks/user.mock';
 import { UsersService } from 'src/app/services/user.service';
 import {
@@ -19,26 +20,32 @@ import {
 
 import { RegisterFormComponent } from './register-form.component';
 
-describe('RegisterFormComponent', () => {
+fdescribe('RegisterFormComponent', () => {
   let component: RegisterFormComponent;
   let fixture: ComponentFixture<RegisterFormComponent>;
   let userService: jasmine.SpyObj<UsersService>;
+  let routerService: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     const userServiceSpy = jasmine.createSpyObj('UsersService', [
       'create',
       'isAvailableByEmail',
     ]);
+    const routerServiceSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
     await TestBed.configureTestingModule({
       declarations: [RegisterFormComponent],
       imports: [ReactiveFormsModule],
-      providers: [{ provide: UsersService, useValue: userServiceSpy }],
+      providers: [
+        { provide: UsersService, useValue: userServiceSpy },
+        { provide: Router, useValue: routerServiceSpy },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterFormComponent);
     userService = TestBed.inject(UsersService) as jasmine.SpyObj<UsersService>;
+    routerService = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     component = fixture.componentInstance;
     userService.isAvailableByEmail.and.returnValue(
       mockObservable({ isAvailable: true })
@@ -178,6 +185,7 @@ describe('RegisterFormComponent', () => {
     expect(component.status).toBe('success');
     expect(userService.create).toHaveBeenCalled();
     expect(component.form.valid).toBeTruthy();
+    expect(routerService.navigateByUrl).toHaveBeenCalledWith('/login');
   }));
 
   it('should send the form successfully and change "loading" to "error" from UI', fakeAsync(() => {
