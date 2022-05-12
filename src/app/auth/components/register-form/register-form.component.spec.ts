@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { generateOneUser } from 'src/app/mocks/user.mock';
 import { UsersService } from 'src/app/services/user.service';
-import { getText, query, setInputValue } from 'src/testing';
+import { getText, mockObservable, query, setInputValue } from 'src/testing';
 
 import { RegisterFormComponent } from './register-form.component';
 
@@ -21,6 +22,7 @@ fdescribe('RegisterFormComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterFormComponent);
+    userService = TestBed.inject(UsersService) as jasmine.SpyObj<UsersService>;
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -79,5 +81,23 @@ fdescribe('RegisterFormComponent', () => {
 
     const textError = getText(fixture, 'emailField-email');
     expect(textError).toContain("It's not a email");
+  });
+
+  it('should send the form successfully', () => {
+    component.form.patchValue({
+      name: 'Armando',
+      email: 'rivera.armando@gmail.com',
+      password: '123456',
+      confirmPassword: '123456',
+      checkTerms: true,
+    });
+
+    const mockUser = generateOneUser();
+    userService.create.and.returnValue(mockObservable(mockUser));
+
+    component.register(new Event('submit'));
+
+    expect(userService.create).toHaveBeenCalled();
+    expect(component.form.valid).toBeTruthy();
   });
 });
