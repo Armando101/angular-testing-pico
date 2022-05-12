@@ -7,7 +7,14 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { generateOneUser } from 'src/app/mocks/user.mock';
 import { UsersService } from 'src/app/services/user.service';
-import { asyncData, getText, mockObservable, setInputValue } from 'src/testing';
+import {
+  asyncData,
+  clickElement,
+  getText,
+  mockObservable,
+  query,
+  setInputValue,
+} from 'src/testing';
 
 import { RegisterFormComponent } from './register-form.component';
 
@@ -119,6 +126,42 @@ fdescribe('RegisterFormComponent', () => {
     userService.create.and.returnValue(asyncData(mockUser));
 
     component.register(new Event('submit'));
+
+    expect(component.status).toBe('loading');
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component.status).toBe('success');
+    expect(userService.create).toHaveBeenCalled();
+    expect(component.form.valid).toBeTruthy();
+  }));
+
+  it('should send the form successfully and change "loading" to "success" from UI', fakeAsync(() => {
+    setInputValue(fixture, 'input#name', 'Armando', ['input', 'blur']);
+    setInputValue(fixture, 'input#email', 'rivera.armando@gmail.com', [
+      'input',
+      'blur',
+    ]);
+    setInputValue(fixture, 'input#password', '123456', ['input', 'blur']);
+    setInputValue(fixture, 'input#confirmPassword', '123456', [
+      'input',
+      'blur',
+    ]);
+    setInputValue(
+      fixture,
+      'input#terms',
+      'true',
+      ['change', 'blur'],
+      'checkbox'
+    );
+
+    const mockUser = generateOneUser();
+    userService.create.and.returnValue(asyncData(mockUser));
+
+    clickElement(fixture, 'btn-submit', true);
+    // query(fixture, 'form').triggerEventHandler('ngSubmit', new Event('submit'));
+    fixture.detectChanges();
 
     expect(component.status).toBe('loading');
 
