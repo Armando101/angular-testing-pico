@@ -4,5 +4,5 @@
     <figcaption>{{ product.title }} - {{ product.price }}</figcaption>
   </figure>
   <p>{{ product.description }}</p>
-  <button>Ver detalle</button>
+  <a [routerLink]="['./', product.id]">See detail</a>
 </div>
