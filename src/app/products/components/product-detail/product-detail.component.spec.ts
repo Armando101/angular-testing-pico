@@ -1,8 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { generateOneProduct } from 'src/app/mocks/product.mock';
 import { ProductsService } from 'src/app/services/product.service';
-import { ActivatedRouteStub, getText, mockObservable } from 'src/testing';
+import {
+  ActivatedRouteStub,
+  asyncData,
+  getText,
+  mockObservable,
+} from 'src/testing';
 
 import { ProductDetailComponent } from './product-detail.component';
 
@@ -83,4 +94,33 @@ fdescribe('ProductDetailComponent', () => {
     expect(priceText).toContain(`${productMock.price}`);
     expect(productsService.getOne).toHaveBeenCalledWith(productId);
   });
+
+  it('should go to back without id params', () => {
+    route.setParamMap({});
+    location.back.and.callThrough();
+
+    fixture.detectChanges();
+    expect(location.back).toHaveBeenCalled();
+  });
+
+  it('should change from "loading" to "succes"', fakeAsync(() => {
+    const productId = '2';
+    route.setParamMap({ id: productId });
+
+    const productMock = {
+      ...generateOneProduct(),
+      id: productId,
+    };
+
+    productsService.getOne.and.returnValue(asyncData(productMock));
+    fixture.detectChanges();
+    expect(component.state).withContext('from init to loading').toBe('loading');
+
+    tick();
+    fixture.detectChanges();
+
+    expect(component.state)
+      .withContext('from loading to success')
+      .toBe('success');
+  }));
 });

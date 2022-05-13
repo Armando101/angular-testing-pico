@@ -13,6 +13,7 @@ import { ProductsService } from '../../../services/product.service';
 })
 export class ProductDetailComponent implements OnInit {
   product: Product | null = null;
+  state: 'loading' | 'error' | 'success' | 'init' = 'init';
 
   constructor(
     private route: ActivatedRoute,
@@ -32,11 +33,14 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private getProductDetail(productId: string) {
+    this.state = 'loading';
     this.productsService.getOne(productId).subscribe({
       next: (product) => {
+        this.state = 'success';
         this.product = product;
       },
       error: () => {
+        this.state = 'error';
         this.goToBack();
       },
     });
