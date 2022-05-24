@@ -3,6 +3,16 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { RouterLinkDirectiveStub } from '../testing/router-link-directive-stub';
 import { queryAllByDirective } from 'src/testing';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-banner',
+})
+class BannerStubComponent {}
+@Component({
+  selector: 'app-footer',
+})
+class FooterStubComponent {}
 
 fdescribe('AppComponent', () => {
   let component: AppComponent;
@@ -11,7 +21,12 @@ fdescribe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [AppComponent, RouterLinkDirectiveStub],
+      declarations: [
+        AppComponent,
+        RouterLinkDirectiveStub,
+        BannerStubComponent,
+        FooterStubComponent,
+      ],
     }).compileComponents();
   });
 

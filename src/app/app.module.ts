@@ -12,6 +12,8 @@ import { PersonListComponent } from './components/person-list/person-list.compon
 import { OthersComponent } from './components/others/others.component';
 import { HighligthDirective } from './directives/highligth.directive';
 import { ReversePipe } from './pipes/reverse.pipe';
+import { BannerComponent } from './components/banner/banner.component';
+import { FooterComponent } from './components/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,8 @@ import { ReversePipe } from './pipes/reverse.pipe';
     OthersComponent,
     HighligthDirective,
     ReversePipe,
+    BannerComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
