@@ -18,7 +18,7 @@ import { asyncData } from '../testing/async-data';
 import { AuthService } from './services/auth.service';
 import { generateOneUser } from './mocks/user.mock';
 
-fdescribe('App integration test', () => {
+describe('App integration test', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let router: Router;
