@@ -10,7 +10,7 @@ import {
 import { generateOneUser } from '../mocks/user.mock';
 import { mockObservable } from '../../testing/async-data';
 
-fdescribe('Tests for AuthGuard', () => {
+describe('Tests for AuthGuard', () => {
   let guard: AuthGuard;
   let tokenService: jasmine.SpyObj<TokenService>;
   let authService: jasmine.SpyObj<AuthService>;
