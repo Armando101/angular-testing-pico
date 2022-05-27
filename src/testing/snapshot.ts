@@ -1,4 +1,9 @@
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Params,
+  RouterStateSnapshot,
+  convertToParamMap,
+} from '@angular/router';
 
 export function fakeRouterStateSnapshot(
   optionList: Partial<RouterStateSnapshot>
@@ -10,4 +15,8 @@ export function fakeActivatedRouteSnapshot(
   optionList: Partial<ActivatedRouteSnapshot>
 ) {
   return optionList as ActivatedRouteSnapshot;
+}
+
+export function fakeParamMap(paramList: Params = {}) {
+  return convertToParamMap(paramList);
 }

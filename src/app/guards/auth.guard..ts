@@ -32,6 +32,8 @@ export class AuthGuard implements CanActivate {
     //   return false;
     // }
     // return true;
+    const param = route.params.idProduct;
+    console.log(param);
     return this.authService.getUser().pipe(
       map((user) => {
         if (!user) {

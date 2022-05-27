@@ -49,7 +49,11 @@ fdescribe('Tests for AuthGuard', () => {
   });
 
   it('should return true with session', (doneFn) => {
-    const activatedRoute = fakeActivatedRouteSnapshot({});
+    const activatedRoute = fakeActivatedRouteSnapshot({
+      params: {
+        idProduct: '123',
+      },
+    });
     const routerState = fakeRouterStateSnapshot({});
 
     const userMock = generateOneUser();
@@ -61,8 +65,29 @@ fdescribe('Tests for AuthGuard', () => {
     });
   });
 
-  it('should return true with out session', (doneFn) => {
-    const activatedRoute = fakeActivatedRouteSnapshot({});
+  it('should return false without session', (doneFn) => {
+    const activatedRoute = fakeActivatedRouteSnapshot({
+      params: {
+        idProduct: '123',
+      },
+    });
+    const routerState = fakeRouterStateSnapshot({});
+
+    authService.getUser.and.returnValue(mockObservable(null));
+
+    guard.canActivate(activatedRoute, routerState).subscribe((rta) => {
+      expect(rta).toBeFalse();
+      expect(router.navigate).toHaveBeenCalledWith(['/home']);
+      doneFn();
+    });
+  });
+
+  it('should return false with idProduct Params', (doneFn) => {
+    const activatedRoute = fakeActivatedRouteSnapshot({
+      params: {
+        idProduct: '123',
+      },
+    });
     const routerState = fakeRouterStateSnapshot({});
 
     authService.getUser.and.returnValue(mockObservable(null));
