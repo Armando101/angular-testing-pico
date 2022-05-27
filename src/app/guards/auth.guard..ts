@@ -33,11 +33,10 @@ export class AuthGuard implements CanActivate {
     // }
     // return true;
     const param = route.params.idProduct;
-    console.log(param);
     return this.authService.getUser().pipe(
       map((user) => {
         if (!user) {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
           return false;
         }
         return true;

@@ -15,23 +15,31 @@ import { routes } from './app-routing.module';
 import { ProductsService } from './services/product.service';
 import { generateManyProducts } from './mocks/product.mock';
 import { asyncData } from '../testing/async-data';
+import { AuthService } from './services/auth.service';
+import { generateOneUser } from './mocks/user.mock';
 
 fdescribe('App integration test', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let router: Router;
   let productService: jasmine.SpyObj<ProductsService>;
+  let authService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
     const productsServiceSpy = jasmine.createSpyObj('productService', [
       'getAll',
     ]);
+    const authServiceSpy = jasmine.createSpyObj('AuthService', ['getUser']);
     await TestBed.configureTestingModule({
       imports: [AppModule, RouterTestingModule.withRoutes(routes)],
       providers: [
         {
           provide: ProductsService,
           useValue: productsServiceSpy,
+        },
+        {
+          provide: AuthService,
+          useValue: authServiceSpy,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -48,6 +56,7 @@ fdescribe('App integration test', () => {
     productService = TestBed.inject(
       ProductsService
     ) as jasmine.SpyObj<ProductsService>;
+    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
 
     tick(); // Wait untill navigation
     fixture.detectChanges();
@@ -65,6 +74,10 @@ fdescribe('App integration test', () => {
   it('should render OthersComponent when clicked', fakeAsync(() => {
     const productsMock = generateManyProducts(10);
     productService.getAll.and.returnValue(asyncData(productsMock));
+
+    const userMock = generateOneUser();
+    authService.getUser.and.returnValue(asyncData(userMock));
+
     clickElement(fixture, 'others-link', true);
     tick();
     fixture.detectChanges();
@@ -77,6 +90,22 @@ fdescribe('App integration test', () => {
     expect(router.url).toEqual('/others');
     expect(element).not.toBeNull();
     expect(text).toContain(`${productsMock.length}`);
+  }));
+
+  it('should render homeComponent when clicked without sesion', fakeAsync(() => {
+    const productsMock = generateManyProducts(10);
+    productService.getAll.and.returnValue(asyncData(productsMock));
+
+    authService.getUser.and.returnValue(asyncData(null));
+
+    clickElement(fixture, 'others-link', true);
+    tick();
+    fixture.detectChanges();
+
+    tick();
+    fixture.detectChanges();
+
+    expect(router.url).toEqual('/');
   }));
 
   it('should render PeopleComponent when clicked', fakeAsync(() => {
