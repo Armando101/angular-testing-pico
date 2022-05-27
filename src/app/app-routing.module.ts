@@ -3,8 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { OthersComponent } from './components/others/others.component';
 import { PersonListComponent } from './components/person-list/person-list.component';
 import { PicoPreviewComponent } from './components/pico-preview/pico-preview.component';
+import { AuthGuard } from './guards/auth.guard.';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'pico-preview',
     component: PicoPreviewComponent,
@@ -24,6 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'others',
+    canActivate: [AuthGuard],
     component: OthersComponent,
   },
 ];
