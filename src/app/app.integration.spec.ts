@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA, Component } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   TestBed,
   ComponentFixture,
@@ -10,36 +10,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { queryAllByDirective } from '../testing/finders';
 import { clickElement, query } from 'src/testing';
-
-@Component({
-  selector: 'app-products',
-})
-class ProductsComponent {}
-
-@Component({
-  selector: 'app-person-list',
-})
-class PersonListComponent {}
-
-@Component({
-  selector: 'app-others',
-})
-class OthersComponent {}
-
-const routes = [
-  {
-    path: 'products',
-    component: ProductsComponent,
-  },
-  {
-    path: 'people',
-    component: PersonListComponent,
-  },
-  {
-    path: 'others',
-    component: OthersComponent,
-  },
-];
+import { AppModule } from './app.module';
+import { routes } from './app-routing.module';
 
 fdescribe('App integration test', () => {
   let component: AppComponent;
@@ -48,13 +20,7 @@ fdescribe('App integration test', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [
-        AppComponent,
-        ProductsComponent,
-        PersonListComponent,
-        OthersComponent,
-      ],
+      imports: [AppModule, RouterTestingModule.withRoutes(routes)],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
@@ -87,6 +53,16 @@ fdescribe('App integration test', () => {
 
     expect(router.url).toEqual('/others');
     const element = query(fixture, 'app-others');
+    expect(element).not.toBeNull();
+  }));
+
+  it('should render PeopleComponent when clicked', fakeAsync(() => {
+    clickElement(fixture, 'people-link', true);
+    tick();
+    fixture.detectChanges();
+
+    expect(router.url).toEqual('/people');
+    const element = query(fixture, 'app-person-list');
     expect(element).not.toBeNull();
   }));
 });

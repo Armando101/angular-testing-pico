@@ -4,7 +4,7 @@ import { OthersComponent } from './components/others/others.component';
 import { PersonListComponent } from './components/person-list/person-list.component';
 import { PicoPreviewComponent } from './components/pico-preview/pico-preview.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'pico-preview',
     component: PicoPreviewComponent,
