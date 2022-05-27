@@ -5,12 +5,14 @@ import {
   tick,
   fakeAsync,
 } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, RouterLinkWithHref } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { queryAllByDirective } from '../testing/finders';
+import { clickElement, query } from 'src/testing';
 
 @Component({
-  selector: 'app-pico-preview',
+  selector: 'app-products',
 })
 class ProductsComponent {}
 
@@ -26,7 +28,7 @@ class OthersComponent {}
 
 const routes = [
   {
-    path: 'pico-preview',
+    path: 'products',
     component: ProductsComponent,
   },
   {
@@ -72,4 +74,19 @@ fdescribe('App integration test', () => {
   it('should create the app', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should there are 6 routerLinks', () => {
+    const links = queryAllByDirective(fixture, RouterLinkWithHref);
+    expect(links.length).toEqual(6);
+  });
+
+  it('should render OthersComponent when clicked', fakeAsync(() => {
+    clickElement(fixture, 'others-link', true);
+    tick();
+    fixture.detectChanges();
+
+    expect(router.url).toEqual('/others');
+    const element = query(fixture, 'app-others');
+    expect(element).not.toBeNull();
+  }));
 });
