@@ -1,1 +1,14 @@
-<p>product-detail works!</p>
+<section class="container">
+  <article>
+    <a (click)="goToBack()">Back</a>
+    <div class="detail" *ngIf="product">
+      <figure>
+        <img data-testid="image" [src]="product.images[0]" alt="" />
+      </figure>
+      <div>
+        <h1 data-testid="title">{{ product.title }}</h1>
+        <h2 data-testid="price">{{ product.price | currency }}</h2>
+      </div>
+    </div>
+  </article>
+</section>

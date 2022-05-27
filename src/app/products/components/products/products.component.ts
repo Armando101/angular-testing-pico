@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../../models/product.model';
-
-import { ProductsService } from './../../../services/product.service';
-import { ValueService } from './../../../services/value.service';
+import { Product } from 'src/app/models/product.model';
+import { ProductsService } from 'src/app/services/product.service';
+import { ValueService } from 'src/app/services/value.service';
 
 @Component({
   selector: 'app-products',
@@ -14,11 +13,11 @@ export class ProductsComponent implements OnInit {
   limit = 10;
   offset = 0;
   status: 'loading' | 'success' | 'error' | 'init' = 'init';
-  rta = '';
+  rta: string;
 
   constructor(
-    private productsService: ProductsService,
-    private valueService: ValueService
+    private readonly productService: ProductsService,
+    private readonly valueService: ValueService
   ) {}
 
   ngOnInit(): void {
@@ -27,21 +26,21 @@ export class ProductsComponent implements OnInit {
 
   getAllProducts() {
     this.status = 'loading';
-    this.productsService
+    this.productService
       .getAll(String(this.limit), String(this.offset))
-      .subscribe({
-        next: (products) => {
+      .subscribe(
+        (products) => {
           this.products = [...this.products, ...products];
           this.offset += this.limit;
           this.status = 'success';
         },
-        error: () => {
+        (error) => {
           setTimeout(() => {
             this.products = [];
             this.status = 'error';
-          }, 1000);
-        },
-      });
+          }, 300);
+        }
+      );
   }
 
   async callPromise() {
