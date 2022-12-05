@@ -3,11 +3,27 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.7.
 
 ## WSL
-```
+
+```bash
 sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt -y install ./google-chrome-stable_current_amd64.deb
+```
+
+### Karma.config.js file
+
+```js
+ {
+
+   browsers: ["ChromeHeadless"],
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: "ChromeHeadless",
+        flags: ["--no-sandbox"],
+      },
+    },
+ }
 ```
 
 google-chrome --version
